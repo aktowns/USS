@@ -1,0 +1,218 @@
+;;;
+;;; list.uss
+;;; Functions for dealing with lists
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; return the first item a list
+;
+; l: the source list
+(fun 'fst |l| { eval (head l) })
+
+; return the second item in a list
+;
+; l: the source list
+(fun 'snd |l| { eval (head (tail l)) })
+
+; return the third item in list
+;
+; l: the source list
+(fun 'trd |l| { eval (head (tail (tail l))) })
+
+; return the length of a list
+;
+; l: the source list
+(fun 'len |l| {
+  if (== l nil)
+    {0}
+    {foldl (\ {x _} {+ x 1}) 0 l}
+})
+
+; nth item in list
+;
+; n: the list index
+; l: the source list
+(fun 'nth |n l| {
+  if (== n 0)
+    {fst l}
+    {nth (- n 1) (tail l)}
+})
+
+; last item in list
+;
+; l: the source list
+(fun 'last |l| {
+  nth (- (len l) 1) l
+})
+
+; apply function to list
+;
+; f: function to apply
+; l: the source list
+(fun 'map |f l| {
+  if (== l nil)
+    {nil}
+    {join
+      (list (f (fst l)))
+      (map f (tail l))
+    }
+})
+
+; apply filter to list
+;
+; f: function to apply
+; l: the source list
+(fun 'filter |f l| {
+  if (== l nil)
+    {nil}
+    {join (if (f (fst l)) {head l} {nil}) (filter f (tail l))}
+})
+
+; return all of list but last element
+;
+; l: the source list
+(fun 'init |l| {
+  if (== (tail l) nil)
+    {nil}
+    {join (head l) (init (tail l))}
+})
+
+; reverse list
+;
+; l: the source list
+(fun 'reverse |l| {
+  if (== l nil)
+    {nil}
+    {join (reverse (tail l)) (head l)}
+})
+
+; fold a list from the left
+;
+; f: function to apply
+; z: initial value
+; l: the source list
+(fun 'foldl |f z l| {
+  if (== l nil)
+    {z}
+    {foldl f (f z (fst l)) (tail l)}
+})
+
+; fold a list from the right
+;
+; f: function to apply
+; z: initial value
+; l: the source list
+(fun 'foldr |f z l| {
+  if (== l nil)
+    {z}
+    {f (fst l) (foldr f z (tail l))}
+})
+
+; sum of all items in a list
+;
+; l: the source list
+(fun 'sum |l| {
+  foldl + 0 l
+})
+
+; the product of all items in a list
+;
+; l: the source list
+(fun 'product |l| {
+  foldl * 1 l
+})
+
+; take n items out of a list
+;
+; n: number of items to take
+; l: the source list
+(fun 'take |n l| {
+  if (== n 0)
+    {nil}
+    {join (head l) (take (- n 1) (tail l))}
+})
+
+; skip over n items in a list
+;
+; n: number of items to skip
+; l: the source list
+(fun 'drop |n l| {
+  if (== n 0)
+    {l}
+    {drop (- n 1) (tail l)}
+})
+
+; split a list
+;
+; n: number to split the list at
+; l: the source list
+(fun 'split |n l| {
+  list (take n l) (drop n l)
+})
+
+; take items while function is true
+;
+; f: predicate function
+; l: the source list
+(fun 'take-while |f l| {
+  if (not (unpack f (head l)))
+    {nil}
+    {join (head l) (take-while f (tail l))}
+})
+
+; skip items while function is true
+;
+; f: predicate function
+; l: the source list
+(fun 'drop-while |f l| {
+  if (not (unpack f (head l)))
+    {l}
+    {drop-while f (tail l)}
+})
+
+; check an element exists in the list
+;
+; x: element to check for
+; l: the source list
+(fun 'elem |x l| {
+  if (== l nil)
+    {false}
+    {if (== x (fst l)) {true} {elem x (tail l)}}
+})
+
+; find element in list of pairs
+;
+; x: the 'key' to search for
+; l: the source list
+(fun 'lookup |x l| {
+  if (== l nil)
+    {error "No Element Found"}
+    {do
+      (= 'key (fst (fst l)))
+      (= 'val (snd (fst l)))
+      (if (== key x) {val} {lookup x (tail l)})
+    }
+})
+
+; zip two lists together into a list of pairs
+;
+; x: first list
+; y: second list
+(fun 'zip |x y| {
+  if (or (== x nil) (== y nil))
+    {nil}
+    {join (list (join (head x) (head y))) (zip (tail x) (tail y))}
+})
+
+; unzip a list of pairs into two lists
+;
+; l: the source list
+(fun 'unzip |l| {
+  if (== l nil)
+    {{nil nil}}
+    {do
+      (= 'x (fst l))
+      (= 'xs (unzip (tail l)))
+      (list (join (head x) (fst xs)) (join (tail x) (snd xs)))
+    }
+})

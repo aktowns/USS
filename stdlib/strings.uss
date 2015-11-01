@@ -1,0 +1,54 @@
+;;;
+;;; strings.uss
+;;; Functions for dealing with strings
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; combine multiple strings
+;
+; str1: starting string
+; &xs: extra strings
+(fun 'str-concat |str1 & xs| {
+  do
+    (= 'strlist (map string-to-list xs))
+    (string-from-list (foldl join (string-to-list str1) strlist))
+})
+
+(alias '++ str-concat)
+
+; return the nth element in a string
+;
+; n: number offset
+; str: the source string
+(fun 'str-nth |n str| {
+  if (< n (str-len str))
+     {nth n (string-to-list str)}
+     {error "offset out of bounds"}
+})
+
+; return the length of a string
+;
+; str: the source string
+(fun 'str-len |str| {
+  len (string-to-list str)
+})
+
+; slice a string
+;
+;
+(fun 'str-slice |start count str| {
+
+})
+
+
+(fun 'str-reverse |str| {
+  string-from-list
+    (reverse
+      (string-to-list str))
+})
+
+(fun 'str-join |i x & xs| {
+  foldl (\ |a b| {++ a i b}) x xs
+})
+
+(def 'path-join (str-join "/"))

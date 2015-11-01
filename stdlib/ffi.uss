@@ -1,0 +1,30 @@
+;;;
+;;; FFI Helpers
+;;;
+;;; LIBC Wrappers
+
+(def 'libc (ffi-open "libc.so.6"))
+
+(def 'libc-malloc
+  (ffi-def 'malloc {ffi-int32} ffi-string libc))
+
+(def 'libc-puts
+  (ffi-def 'puts {ffi-string} ffi-int32 libc))
+
+(def 'libc-atoi
+  (ffi-def 'atoi {ffi-string} ffi-int32 libc))
+
+(def 'libc-sprintf
+  (ffi-def 'sprintf {ffi-string ffi-string ffi-int32} ffi-int32 libc))
+
+;(fun {itoa v} (
+;    do {
+;        (def {ptr} (ffi-call libc_malloc 1024))
+;        (ffi-call libc_sprintf ptr "%d" v)
+;        {ptr}
+;    }
+;)   )
+
+(fun 'log |x| {
+    (ffi-call libc-puts x)
+})
