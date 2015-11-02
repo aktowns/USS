@@ -5,6 +5,7 @@
 
 typedef struct {
     mpc_parser_t* number;
+    mpc_parser_t* character;
     mpc_parser_t* symbol;
     mpc_parser_t* qsymbol;
     mpc_parser_t* typeann;

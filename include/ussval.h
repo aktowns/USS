@@ -58,6 +58,7 @@ ussval_t* ussval_call(ussenv_t* e, ussval_t* f, ussval_t* a);
 ussval_t* ussval_eval_sexpr(ussenv_t* e, ussval_t* v);
 ussval_t* ussval_eval(ussenv_t* e, ussval_t* v);
 ussval_t* ussval_read_num(mpc_ast_t* t);
+ussval_t* ussval_read_char(mpc_ast_t* t);
 ussval_t* ussval_read_str(mpc_ast_t* t);
 ussval_t* ussval_read(mpc_ast_t* t);
 ussval_t* ussval_eval_from_file(ussenv_t* e, char* path);

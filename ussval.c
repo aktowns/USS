@@ -242,7 +242,7 @@ void ussval_print(ussval_t* v) {
             printf("%i", v->num);
             break;
         case UVAL_CHAR:
-            printf("\\%c", v->chr);
+            printf("$%c", v->chr);
             break;
         case UVAL_ERR:
             printf("Error: %s", v->err);
@@ -422,16 +422,20 @@ ussval_t* ussval_read_num(mpc_ast_t* t) {
     return errno != ERANGE ? ussval_new_num(x) : ussval_new_err("Invalid Number.");
 }
 
+ussval_t* ussval_read_char(mpc_ast_t* t) {
+    return ussval_new_char(t->contents[1]);
+}
+
 ussval_t* ussval_read_str(mpc_ast_t* t) {
     /* Cut off the final quote character */
-    t->contents[strlen(t->contents)-1] = '\0';
+    t->contents[strlen(t->contents) - 1] = '\0';
     /* Copy the string missing out the first quote character */
-    char* unescaped = malloc(strlen(t->contents+1)+1);
-    strcpy(unescaped, t->contents+1);
+    char *unescaped = malloc(strlen(t->contents + 1) + 1);
+    strcpy(unescaped, t->contents + 1);
     /* Pass through the unescape function */
     unescaped = mpcf_unescape(unescaped);
     /* Construct a new lval using the string */
-    ussval_t* str = ussval_new_str(unescaped);
+    ussval_t *str = ussval_new_str(unescaped);
     /* Free the string and return */
     free(unescaped);
     return str;
@@ -442,6 +446,8 @@ ussval_t* ussval_read(mpc_ast_t* t) {
 
     if (strstr(t->tag, "number")) {
         return ussval_read_num(t);
+    } else if (strstr(t->tag, "character")) {
+        return ussval_read_char(t);
     } else if (strstr(t->tag, "string")) {
         return ussval_read_str(t);
     } else if (strstr(t->tag, "qsymbol")) {
