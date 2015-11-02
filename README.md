@@ -34,7 +34,7 @@ Outside of the book i've added:
   - linter
   - doc-gen
 * character primitive
-  - `{\H \e \l \l \o \ \W \o \r \l \d}`
+  - `{$H $e $l $l $o $ $W $o $r $l $d}`
 * string methods to convert to and from lists
 
 

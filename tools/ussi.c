@@ -29,8 +29,8 @@ int main(int argc, char** argv) {
     ussval_del(prelude);
 
     puts("USS Version 0.0.1");
-    puts("Press Ctrl+c to Exit");
     printf("boehm gc: heap size=%d bytes\n\n", (int) GC_get_heap_size());
+    puts("Press Ctrl+c to Exit");
 
     EditLine *el;
     History *replHistory;

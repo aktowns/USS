@@ -95,7 +95,7 @@ ussval_t* builtin_load(ussenv_t* e, ussval_t* a) {
     parser_t *parser = parser_toplevel();
 
     if (mpc_parse_contents(a->cell[0]->str, parser->uss, &r)) {
-        puts(a->cell[0]->str);
+        fprintf(stderr, "DEBUG: loading: %s\n", a->cell[0]->str);
         ussenv_put(e, ussval_new_sym("file-path"), a->cell[0]);
         ussenv_put(e, ussval_new_sym("file-dir"), ussval_new_str(dirname(a->cell[0]->str)));
 
