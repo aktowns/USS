@@ -47,7 +47,7 @@ ussval_t* builtin_ffi_open(__unused ussenv_t* e, ussval_t* a) {
 
     if (!lib->handle) {
         fprintf(stderr, "dlopen error: %s\n", dlerror());
-        return LVAL_NIL;
+        return UVAL_NIL;
     }
 
     HASH_ADD_INT(loaded_libraries, handle, lib);
@@ -132,7 +132,7 @@ ussval_t* builtin_ffi_call(__unused ussenv_t* e, ussval_t* a) {
             args[i] = &func_arg->num;
         } else {
             fprintf(stderr, "error doing ffi-conversion %i is not implemented", type);
-            return LVAL_NIL;
+            return UVAL_NIL;
         }
     }
 
@@ -142,14 +142,14 @@ ussval_t* builtin_ffi_call(__unused ussenv_t* e, ussval_t* a) {
 
     if (lib == NULL) {
         fprintf(stderr, "failed to find library with handle %i\n", func_def->library_handle);
-        return LVAL_NIL;
+        return UVAL_NIL;
     }
 
     void* func = dlsym(lib->libhandle, func_def->name);
     char* err = dlerror();
     if (err) {
         fprintf(stderr, "dlsym failed: %s\n", err);
-        return LVAL_NIL;
+        return UVAL_NIL;
     }
 
     ffi_type* return_type = ffi_type_from_sym(func_def->return_type);
@@ -158,7 +158,7 @@ ussval_t* builtin_ffi_call(__unused ussenv_t* e, ussval_t* a) {
     ffi_status status = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, (unsigned int) func_def->arity, return_type, ffi_types);
     if (status != FFI_OK) {
         fprintf(stderr, "ffi_prep_cif failed: %d\n", status);
-        return LVAL_NIL;
+        return UVAL_NIL;
     }
 
     void* return_val;
@@ -172,7 +172,7 @@ ussval_t* builtin_ffi_call(__unused ussenv_t* e, ussval_t* a) {
         return ussval_new_str(return_val);
     }
 
-    return LVAL_NIL;
+    return UVAL_NIL;
 }
 
 ussval_t* builtin_ffi_def(__unused ussenv_t* e, ussval_t* a) {
@@ -193,7 +193,7 @@ ussval_t* builtin_ffi_def(__unused ussenv_t* e, ussval_t* a) {
 
     if (lib == NULL) {
         fprintf(stderr, "failed to find library with handle %i\n", library_handle->num);
-        return LVAL_NIL;
+        return UVAL_NIL;
     }
 
     UASSERT_NUM("ffi-open-name", func_def, 1);

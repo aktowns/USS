@@ -9,7 +9,7 @@ const char* grammar =
         qsymbol   : /'[a-zA-Z0-9_+\\-*\\/\\\\=<>!&]+/ ;            \
         typeann   : <symbol> ':' /[a-zA-Z0-9-]+/ ;                 \
         string    : /\"(\\\\.|[^\"])*\"/ ;                         \
-        comment   : /;[^\\r\\n]*/ ;                                \
+        comment   : /(;|#!)[^\\r\\n]*/ ;                           \
         list      : '[' <expr>* ']' ;                              \
         sexpr     : '(' <expr>* ')' ;                              \
         qexpr     : /({|\\|)/ <expr>* /(}|\\|)/' ;                 \

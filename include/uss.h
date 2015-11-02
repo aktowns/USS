@@ -34,7 +34,7 @@
   UASSERT(args, args->cell[index]->count != 0, \
     "Function '%s' passed {} for argument %i.", func, index);
 
-#define LVAL_NIL ussval_new_qexpr()
+#define UVAL_NIL ussval_new_qexpr()
 
 
 #endif //USS_USS_H
